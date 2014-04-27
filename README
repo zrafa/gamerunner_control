@@ -1,0 +1,80 @@
+
+GameRunner Game Control for Openmoko Mobile Devices (FreeRunner phone)
+
+Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>
+
+
+Application which reads touchscreen and accelerometers, and then,
+sends key Xevents. If there is some game running it gets the XEvents and
+manages those like if these come from keyboard directly.
+
+
+Current version. For powermanga run :
+#!/bin/sh
+# sleep 10
+# 300 va para abajo
+# 150 va para arriba facil
+exec ./gr_control_for_dmenu 190 54 40 45 4 90 0 0 0 0 Escape space Up space Down Left Right Left Right Up Down Escape space Escape space Escape space space 1 2
+
+
+
+
+IT IS JUST A TEST!.. It works barely for our games, but we need
+to put order the source code.
+
+With this tool, we can build games without modify the code to control it on
+gamerunner.
+
+GameRunner game control has two modes. You can switch between modes using the
+AUX buttom. The idea is to have one mode to navigate menus, and another when
+you are playing the game. If we use accelerometer for up/down/left/right, it is
+too hard to use the game menu. So you can use one mode without accelerometers
+and another with acceleromenters and proper touchscreen for keys.
+
+Check an example to understand how to use it with your ported games. Current
+games using this tool are : tecnoballz, quake1, powermanga, tyrian21.
+Example of Usage :
+
+./gr_game_control 0 0 40 40 4 90 null null null null Escape Return Up Return Down Left Right Left Right Up Down Escape Escape 0 0 space space space 1 6
+
+0 : accelerometer_zHome /* Stores new "Home" position */
+0 : accelerometer_yHome /* Stores new "Home" position */
+40 : accelerometer_zwindow /* DeadZone in Pixels */
+40 : accelerometer_ywindow /* DeadZone in Pixels */
+4 : accelerometer_zscale /* Scaling factor for motion (acceleration) */
+90 : accelerometer_yscale /* Scaling factor for motion (acceleration) */
+
+null null null null Escape Return Up Return Down Left Right : the four "null"s
+are for accelerometers. In this case we don't want to use accelerometers, so
+only touchscreen is used. This first mode is useful for game menu. The next
+"Escape Return Up Return Down Left Right" are the key Xevent to send when
+pressing touchscreen.
+
+Imagine the touchscreen with nine buttons. Only 7 are set.
+Landscape Freerunner, 640x480 (or 320x240) :
+
+1  2  3
+4  5  6
+7  8  9
+
+The 2 button is not used. The 5 button is always used internally to set the
+"Home" position of accelerometers. When you are playing and you want to set
+a new "Home" position (the freerunner angle when you feel comfortable for 0
+movements) just put the freerunner in your prefered position and press the 5
+button (the center of the screen).
+
+So what does "Escape Return Up Return Down Left Right" mean?
+Okey, it means that when you press the 1 button (the uppermost left corner)
+on screen, the gamerunner game control sends the Escape key event to X.
+When you press the 3 button (the uppermost left corner) on screen, the
+gamerunner game control sends the Enter key event to X.
+The same with other:
+4 : Up
+6 : Return
+7 : Down
+8 : Left
+9 : Right
+There is a special word to use with acceleromenters : mouse.
+If you use it the gamerunner game control sends relative mouse movements to X.
+It is useful for games which can be played with mouse on pc, like quake, where
+you can use the mouse to walk. 
